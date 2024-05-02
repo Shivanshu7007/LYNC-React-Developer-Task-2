@@ -11,7 +11,7 @@ import { Button, Input } from "@mui/material";
 const UploadButton = () => {
   const [open, setOpen] = useState(false);
   const [nameModal, setNameModal] = useState(false);
-  const [newFolderName, setNewFolderName] = useState("Untitled folder");
+  const [newFolderName, setNewFolderName] = useState("");
   const fileUploadRef = useRef<any>();
 
   const { addFile, addFolder } = useFileManagement();
@@ -36,7 +36,7 @@ const UploadButton = () => {
       contents: [],
     });
     setNameModal(false);
-    setNewFolderName("Untitled folder");
+    setNewFolderName("");
   };
 
   return (
@@ -85,7 +85,7 @@ const UploadButton = () => {
           <div className={"modalHeader"}>New Folder</div>
           <div className="uploadItem">
             <Input
-              type="text"
+              type="text" placeholder="Untitled Folder"
               value={newFolderName}
               onChange={(e) => setNewFolderName(e.target.value)}
             />
