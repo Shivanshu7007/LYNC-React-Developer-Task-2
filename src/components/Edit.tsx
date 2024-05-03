@@ -1,12 +1,9 @@
 import { Button, Input, Modal } from "@mui/material";
 import React, { useState } from "react";
-import {
-  MdDelete,
-  MdEdit,
-  MdOutlineDriveFileRenameOutline,
-} from "react-icons/md";
+import { MdDelete, MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { Types } from "../context/FolderDataContext";
 import useFileManagement from "../hooks/useFileManagement";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 interface EditProps {
   type: Types;
@@ -32,7 +29,7 @@ const Edit: React.FC<EditProps> = ({ type, name, id }) => {
 
   return (
     <div className="edit">
-      <MdEdit onClick={() => setOpen(true)} size={24} />
+      <BsThreeDotsVertical onClick={() => setOpen(true)} size={24} />
       <Modal className="muiModal" open={open} onClose={() => setOpen(false)}>
         <div className="uploadModal">
           <div

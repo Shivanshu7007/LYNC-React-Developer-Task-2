@@ -6,12 +6,10 @@ import useFileManagement from "../hooks/useFileManagement";
 import { Types } from "../context/FolderDataContext";
 import { Button, Input } from "@mui/material";
 
-// TODO: update current folder's lastModify
-
 const UploadButton = () => {
   const [open, setOpen] = useState(false);
   const [nameModal, setNameModal] = useState(false);
-  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderName, setNewFolderName] = useState("Untitled folder");
   const fileUploadRef = useRef<any>();
 
   const { addFile, addFolder } = useFileManagement();
@@ -36,7 +34,7 @@ const UploadButton = () => {
       contents: [],
     });
     setNameModal(false);
-    setNewFolderName("");
+    setNewFolderName("Untitled folder");
   };
 
   return (
@@ -85,7 +83,7 @@ const UploadButton = () => {
           <div className={"modalHeader"}>New Folder</div>
           <div className="uploadItem">
             <Input
-              type="text" placeholder="Untitled Folder"
+              type="text"
               value={newFolderName}
               onChange={(e) => setNewFolderName(e.target.value)}
             />

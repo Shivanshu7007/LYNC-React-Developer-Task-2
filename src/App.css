@@ -71,18 +71,37 @@ body {
     border-bottom: 5px solid transparent;
     border-left: 5px solid black; /* Adjust the border-left value to change the size of the arrow */
     display: inline-block;
+  }
+
+  .openArrow {
     rotate: 90deg;
+  }
+
+  .closeArrow {
+    rotate: 0deg;
   }
   .item {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #c2e7ff;
     border-radius: 100px;
     padding: 10px;
+    cursor: pointer;
     img {
       margin-left: 10px;
     }
+  }
+
+  .selectedItem {
+    background-color: #c2e7ff;
+  }
+
+  .selectedItem:hover {
+    background-color: #c2e7ff !important;
+  }
+
+  .item:hover {
+    background-color: #c0c4ca;
   }
 }
 
@@ -184,7 +203,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  height: 80%;
+  height: 100%;
 }
 
 .modalHeader,
@@ -199,4 +218,9 @@ body {
   right: 50px;
   top: 12px;
   cursor: pointer;
+}
+
+.iconSection {
+  display: flex;
+  align-items: center;
 }

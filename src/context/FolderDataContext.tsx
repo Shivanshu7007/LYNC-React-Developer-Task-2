@@ -1,90 +1,33 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 export enum Types {
   FILE = "FILE",
   FOLDER = "FOLDER",
 }
 
-export type File =
-  | {
-      id: string;
-      name: string;
-      size: number;
-      type: Types.FILE;
-      fileType?: string;
-      lastModified?: Date;
-    }
-  | {};
+export interface File {
+  id: string;
+  name: string;
+  size: number;
+  type: Types.FILE;
+  fileType?: string;
+  lastModified?: number;
+}
 
-export type Folder =
-  | {
-      id: string;
-      name: string;
-      type: Types.FOLDER;
-      contents: (Folder | File)[];
-      lastModified?: Date;
-    }
-  | {};
+export interface Folder {
+  id: string;
+  name: string;
+  type: Types.FOLDER;
+  contents: (Folder | File)[];
+  lastModified?: number;
+}
 
 const initialFolders = [
   {
     id: "1",
     name: "Home",
-    type: Types.FOLDER,
+    type: Types.FOLDER as const,
+    contents: [],
     lastModified: Date.now(),
-    contents: [
-      // {
-      //   id: "2",
-      //   name: "Folder 1",
-      //   type: Types.FOLDER,
-      //   lastModified: Date.now(),
-      //   contents: [
-      //     {
-      //       id: "3",
-      //       name: "Folder 2",
-      //       type: Types.FOLDER,
-      //       lastModified: Date.now(),
-      //       contents: [
-      //         {
-      //           id: "4",
-      //           name: "Folder 3",
-      //           type: Types.FOLDER,
-      //           lastModified: Date.now(),
-      //           contents: [
-      //             {
-      //               id: "5",
-      //               name: "Folder 4",
-      //               type: Types.FOLDER,
-      //               lastModified: Date.now(),
-      //               contents: [],
-      //             },
-      //             {
-      //               id: "file1",
-      //               name: "File 1",
-      //               type: Types.FILE,
-      //               size: 300000,
-      //               lastModified: Date.now(),
-      //             },
-      //             {
-      //               id: "file2",
-      //               name: "File 2",
-      //               type: Types.FILE,
-      //               size: 380000,
-      //               lastModified: Date.now(),
-      //             },
-      //             {
-      //               id: "file3",
-      //               name: "File 3",
-      //               type: Types.FILE,
-      //               size: 500000,
-      //               lastModified: Date.now(),
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
-    ],
   },
 ];
 
@@ -104,6 +47,26 @@ export function FolderDataProvider({
 }) {
   const [folders, setFolders] = useState<Folder[]>(initialFolders);
   const [currentFolderId, setCurrentFolderId] = useState<string>("1");
+
+  const handlebeforeUnload = useCallback(() => {
+    localStorage.setItem("folders", JSON.stringify(folders));
+  }, [folders]);
+
+  useEffect(() => {
+    const storageFolders = localStorage.getItem("folders");
+
+    if (storageFolders) {
+      setFolders(JSON.parse(storageFolders));
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handlebeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handlebeforeUnload);
+    };
+  }, [handlebeforeUnload]);
 
   return (
     <FolderDataContext.Provider
