@@ -5,6 +5,7 @@ import FolderData from "./components/FolderData";
 import Sidebar from "./components/Sidebar";
 import UploadButton from "./components/UploadButton";
 import { FolderDataProvider } from "./context/FolderDataContext";
+import { ImOnedrive } from "react-icons/im";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <FolderDataProvider>
         <header className="header">
           <div className="headerContent">
-            <img src="logo513.png" alt="header-logo" width={50} height={50} />
+          <ImOnedrive size={50} />
             <span> My Drive</span>
           </div>
         </header>

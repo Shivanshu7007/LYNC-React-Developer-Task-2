@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Types } from "../context/FolderDataContext";
 import useFileManagement from "../hooks/useFileManagement";
+import { FaFolder, FaHome } from "react-icons/fa";
 
 type File = {
   id: string;
@@ -52,10 +53,8 @@ const NestedAccordion = ({
                 setIsOpen((prev) => !prev);
               }}
             ></span>
-            {index === 0 && (
-              <img src="home.png" width={20} height={20} alt="drive-icon" />
-            )}
           </div>
+          {index === 0 ? <FaHome size={20} /> : <FaFolder size={20} />}
           <span>{folder.name}</span>
         </div>
       </div>
