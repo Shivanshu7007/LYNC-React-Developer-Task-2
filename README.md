@@ -17,7 +17,7 @@ Breadcrumbs and Back Button: Use the breadcrumbs at the top of the page to track
 
 ## Dependencies:
 The project relies on the following external dependencies and libraries:
-dependencies": {
+## dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.15",
