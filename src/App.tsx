@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Breadcrumb from "./components/Breadcrumb";
 import FolderData from "./components/FolderData";
@@ -26,6 +27,7 @@ function App() {
           </div>
         </div>
       </FolderDataProvider>
+      <Toaster position="top-center" />
     </main>
   );
 }

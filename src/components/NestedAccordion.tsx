@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Types } from "../context/FolderDataContext";
 import useFileManagement from "../hooks/useFileManagement";
 
@@ -41,8 +41,8 @@ const NestedAccordion = ({
           }`}
           onClick={() => updateCurrentFolderId(folder.id)}
         >
-          {[...Array(index)].map(() => (
-            <div style={{ height: 5, width: 5 }}></div>
+          {[...Array(index)].map((_, i) => (
+            <div key={i} style={{ height: 5, width: 5 }}></div>
           ))}
           <div style={{ display: "flex", alignItems: "center" }}>
             <span
@@ -60,9 +60,9 @@ const NestedAccordion = ({
         </div>
       </div>
       <div style={isOpen ? {} : { display: "none" }}>
-        {folder.contents.map((item) => {
+        {folder.contents.map((item, i) => {
           if (item.type === Types.FILE) {
-            return <></>;
+            return <React.Fragment key={i}></React.Fragment>;;
           }
           return <NestedAccordion folder={item as Folder} index={index + 1} />;
         })}

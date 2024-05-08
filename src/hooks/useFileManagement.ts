@@ -1,85 +1,44 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { FolderDataContext, Types } from "../context/FolderDataContext";
+import { checkWithSameName } from "../utils/validation";
+import toast from "react-hot-toast";
 
 const useFileManagement = () => {
-  const { folders, currentFolderId, setCurrentFolderId, setFolders } = useContext(FolderDataContext);
+  const { folders, currentFolderId, setCurrentFolderId, setFolders } =
+    useContext(FolderDataContext);
 
-  const getFolders = () => folders;
+  const getFolders = useCallback(() => folders, [folders]);
 
-  const getCurrentFolderId = () => currentFolderId;
+  const getCurrentFolderId = useCallback(
+    () => currentFolderId,
+    [currentFolderId]
+  );
 
   const updateCurrentFolderId = (id: string) => setCurrentFolderId(id);
 
   const add = (data: any) => {
-    let isDuplicate = false;
-
-    // Check if the new item is a folder
-    if (data.type === Types.FOLDER) {
-      // Check if there's already a folder with the same name in the current folder
-      isDuplicate = folders[0].contents.some((item: any) => {
-        return item.type === Types.FOLDER && item.name === data.name;
-      });
-
-      // If a folder with the same name already exists, display an alert and return
-      if (isDuplicate) {
-        alert('A folder with the same name already exists.');
-        return;
-      }
-    }
-
-    if (data.type === Types.FILE) {
-      let fileName = data.name;
-      let count = 1;
-      let alertShown = false;
-
-      // Function to check for duplicates
-      const checkDuplicate = (name: string) => {
-        return folders[0].contents.some((item: any) => {
-          return item.type === Types.FILE && item.name === name;
-        });
-      };
-
-      // Check if there's already a file with the same name in the current folder
-      isDuplicate = checkDuplicate(fileName);
-
-      // If a file with the same name already exists, prompt for confirmation to upload another file
-      while (isDuplicate) {
-        if (!alertShown) {
-          const confirmUpload = window.confirm(`A file with the same name already exists. Do you want to upload another file?`);
-          // If the user cancels, do not upload the file
-          if (!confirmUpload) {
-            return;
-          }
-          alertShown = true;
-        }
-
-        // Append a number in parentheses to the file name
-        fileName = `${data.name} (${count})`;
-        count++;
-
-        // Check if the newly generated file name already exists
-        isDuplicate = checkDuplicate(fileName);
-      }
-
-      // Update the data's name with the final file name
-      data.name = fileName;
-    }
-
     let updatedData: any;
     const addData = (obj: any) => {
-      if (obj.contents && Array.isArray(obj.contents)) {
-        if (obj.type === Types.FOLDER && obj.id === currentFolderId) {
-          obj.contents = [...obj.contents, data];
-          updatedData = folders;
+      if (obj.type === Types.FILE) {
+        return;
+      }
+      if (obj.type === Types.FOLDER && obj.id === currentFolderId) {
+        if (checkWithSameName(obj.contents, data)) {
+          toast.error(
+            `${data.type.toLowerCase()} with same name already exists!`
+          );
           return;
         }
+        obj.contents = [...obj.contents, data];
+        updatedData = folders;
+        return;
+      }
 
-        for (let i = 0; i < obj.contents.length; i++) {
-          const currObj = obj.contents[i];
-          addData(currObj);
-          if (updatedData) {
-            return;
-          }
+      for (let i = 0; i < obj.contents.length; i++) {
+        const currObj = obj.contents[i];
+        addData(currObj);
+        if (updatedData) {
+          return;
         }
       }
     };
@@ -115,25 +74,26 @@ const useFileManagement = () => {
 
   const remove = (data: { name: string; id: string; type: Types }) => {
     let updatedData: any;
-
-    const removeData = (obj: any, updatedData: any) => {
+    const removeData = (obj: any) => {
       if (updatedData) {
         return;
       }
-      if (obj.contents && Array.isArray(obj.contents)) {
-        for (let i = 0; i < obj.contents.length; i++) {
-          const currObj = obj.contents[i];
-          if (currObj.type === data.type && currObj.id === data.id) {
-            obj.contents = obj.contents.filter((_: any, index: number) => i !== index);
-            updatedData = folders;
-            return;
-          }
-          removeData(currObj, updatedData);
+      for (let i = 0; i < obj.contents.length; i++) {
+        const currObj = obj.contents[i];
+
+        if (currObj.type === data.type && currObj.id === data.id) {
+          obj.contents = obj.contents.filter(
+            (_: any, index: number) => i !== index
+          );
+          updatedData = folders;
+          return;
         }
+        removeData(currObj);
       }
     };
 
-    removeData(folders[0], updatedData);
+    removeData(folders[0]);
+
     setFolders([...folders]);
   };
 
