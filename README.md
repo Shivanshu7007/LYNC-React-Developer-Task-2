@@ -45,7 +45,7 @@ The project relies on the following external dependencies and libraries:
 ## Start the development server: npm start
 ## Open your web browser and visit http://localhost:3000 to access the My Drive application.
 
-Deployed Link(https://lync-react-developer-task-2.vercel.app/)
+## Deployed Link(https://lync-react-developer-task-2.vercel.app/)
 
 ## Additional Notes:
 This project does not require a backend and handles all front-end functionalities using React states and local storage.
