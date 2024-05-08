@@ -67,8 +67,8 @@ const FolderData = () => {
               <div>
                 {data.lastModified &&
                   formatRelative(
-                    subDays(new Date(), 0),
-                    new Date(data.lastModified)
+                    subDays(new Date(data.lastModified), 0),
+                    new Date()
                   )}
               </div>
               <div>{data.size ? `${data.size / 1000} KB` : "-"}</div>
